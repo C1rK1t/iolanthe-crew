@@ -17,9 +17,12 @@ iolanthe-crew  (index.html, crew.css, crew.js, sw.js)
 
 | Tab | ID | Data source |
 |-----|----|-------------|
-| Navigation | `nav` | `/api/nmea` — polls every 3 s |
+| Navigation | `nav` | `/api/nmea` — polls every 3 s; `/api/track` — polls every 30 s |
 | Watches | `watches` | `/api/charter/watches` |
 | Charter | `charter` | `/api/charter` |
+| Weather | `weather` | `/api/weather` — polls every 30 min |
+
+The Navigation tab includes a Leaflet satellite map (Esri tiles via CDN) with live vessel position, heading-rotated marker, and the shared track line from `/api/track`.
 
 ## Stack
 

@@ -1,4 +1,4 @@
-const CACHE = 'iolanthe-crew-v1';
+const CACHE = 'iolanthe-crew-v2';
 const STATIC = [
   '/crew/',
   '/crew/crew.css',
