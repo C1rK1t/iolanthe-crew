@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iolanthe Crew</title>
+  <meta name="theme-color" content="#0d1f2a">
+  <link rel="manifest" href="/crew/manifest.webmanifest">
+  <link rel="stylesheet" href="/crew/crew.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-vessel">Princess Iolanthe</span>
+      <span class="topbar-role">Crew Portal</span>
+    </div>
+    <div class="topbar-charter" id="charterName"></div>
+    <div class="topbar-time" id="utcClock"></div>
+  </header>
+
+  <nav class="tab-bar" role="tablist">
+    <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="nav">Navigation</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="watches">Watches</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="charter">Charter</button>
+  </nav>
+
+  <main class="tab-panels">
+
+    <!-- ── Navigation ── -->
+    <section id="tab-nav" class="tab-panel active" role="tabpanel">
+      <div class="telemetry-grid">
+        <div class="telem-card" id="t-position">
+          <span class="telem-label">Position</span>
+          <span class="telem-value" id="tv-position">—</span>
+        </div>
+        <div class="telem-card" id="t-cog">
+          <span class="telem-label">COG</span>
+          <span class="telem-value" id="tv-cog">—</span>
+          <span class="telem-unit">°T</span>
+        </div>
+        <div class="telem-card" id="t-sog">
+          <span class="telem-label">SOG</span>
+          <span class="telem-value" id="tv-sog">—</span>
+          <span class="telem-unit">kn</span>
+        </div>
+        <div class="telem-card" id="t-hdg">
+          <span class="telem-label">Heading</span>
+          <span class="telem-value" id="tv-hdg">—</span>
+          <span class="telem-unit">°T</span>
+        </div>
+        <div class="telem-card" id="t-depth">
+          <span class="telem-label">Depth</span>
+          <span class="telem-value" id="tv-depth">—</span>
+          <span class="telem-unit">m</span>
+        </div>
+        <div class="telem-card" id="t-rot">
+          <span class="telem-label">ROT</span>
+          <span class="telem-value" id="tv-rot">—</span>
+          <span class="telem-unit">°/min</span>
+        </div>
+        <div class="telem-card" id="t-awa">
+          <span class="telem-label">App. Wind</span>
+          <span class="telem-value" id="tv-awa">—</span>
+          <span class="telem-unit">° / kn</span>
+        </div>
+        <div class="telem-card" id="t-twd">
+          <span class="telem-label">True Wind</span>
+          <span class="telem-value" id="tv-twd">—</span>
+          <span class="telem-unit">°T / kn</span>
+        </div>
+      </div>
+      <div class="data-age" id="dataAge"></div>
+
+      <div class="route-card card" id="routeCard">
+        <h2 class="card-heading">Active Route</h2>
+        <div class="route-grid" id="routeGrid">
+          <div class="route-item"><span class="route-label">Destination</span><span class="route-val" id="rv-dest">—</span></div>
+          <div class="route-item"><span class="route-label">Distance</span><span class="route-val" id="rv-dtw">—</span><span class="route-unit">nm</span></div>
+          <div class="route-item"><span class="route-label">Bearing</span><span class="route-val" id="rv-btw">—</span><span class="route-unit">°T</span></div>
+          <div class="route-item"><span class="route-label">XTE</span><span class="route-val" id="rv-xte">—</span><span class="route-unit">nm</span></div>
+          <div class="route-item"><span class="route-label">Closing Vel.</span><span class="route-val" id="rv-cv">—</span><span class="route-unit">kn</span></div>
+          <div class="route-item"><span class="route-label">TTG</span><span class="route-val" id="rv-ttg">—</span></div>
+          <div class="route-item"><span class="route-label">ETA</span><span class="route-val" id="rv-eta">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Watches ── -->
+    <section id="tab-watches" class="tab-panel" role="tabpanel">
+      <div class="card">
+        <h2 class="card-heading">Watch Schedule</h2>
+        <div id="watchList" class="watch-list"></div>
+      </div>
+    </section>
+
+    <!-- ── Charter ── -->
+    <section id="tab-charter" class="tab-panel" role="tabpanel">
+      <div class="card" id="charterCard">
+        <h2 class="card-heading">Active Charter</h2>
+        <div id="charterDetail" class="charter-detail"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/crew/crew.js" defer></script>
+</body>
+</html>

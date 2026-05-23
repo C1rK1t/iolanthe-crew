@@ -1,0 +1,9 @@
+{
+  "name": "Iolanthe Crew",
+  "short_name": "Crew",
+  "start_url": "/crew/",
+  "display": "standalone",
+  "background_color": "#0d1f2a",
+  "theme_color": "#0d1f2a",
+  "icons": []
+}

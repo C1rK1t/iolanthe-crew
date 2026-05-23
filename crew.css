@@ -1,0 +1,332 @@
+:root {
+  --bg:        #0d1f2a;
+  --surface:   #152736;
+  --surface2:  #1c3244;
+  --ink:       #e4edf2;
+  --muted:     #7a9bae;
+  --accent:    #2eb8c8;
+  --accent-dk: #1a8d9c;
+  --ok:        #38c47a;
+  --warn:      #f0c040;
+  --line:      #1e3a4e;
+  --radius:    8px;
+  --shadow:    0 4px 16px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Topbar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem clamp(0.75rem, 3vw, 1.5rem);
+  background: #091520;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.topbar-vessel {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.topbar-role {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.topbar-charter {
+  margin-left: auto;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.topbar-time {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Tab bar ── */
+.tab-bar {
+  display: flex;
+  background: #091520;
+  border-bottom: 1px solid var(--line);
+  padding: 0 clamp(0.75rem, 3vw, 1.5rem);
+  gap: 0;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0.55rem 1.1rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+
+.tab-btn:hover,
+.tab-btn:focus {
+  background: transparent;
+  color: var(--ink);
+}
+
+.tab-btn.active,
+.tab-btn[aria-selected="true"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Tab panels ── */
+.tab-panels {
+  flex: 1 0 auto;
+  padding: clamp(0.75rem, 2vw, 1.25rem) clamp(0.75rem, 3vw, 1.5rem);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.card-heading {
+  margin: 0 0 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Telemetry grid ── */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.telem-card {
+  display: grid;
+  gap: 0.2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.85rem;
+  box-shadow: var(--shadow);
+}
+
+.telem-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.telem-value {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.telem-unit {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.telem-card.stale .telem-value {
+  color: var(--muted);
+}
+
+/* ── Data age ── */
+.data-age {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: right;
+  margin-bottom: 0.75rem;
+}
+
+.data-age.warn { color: var(--warn); }
+.data-age.error { color: #e05454; }
+
+/* ── Route card ── */
+.route-card {
+  display: none;
+}
+
+.route-card.visible {
+  display: block;
+}
+
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.55rem;
+}
+
+.route-item {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem;
+  background: var(--surface2);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.route-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.route-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.route-unit {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* ── Watch list ── */
+.watch-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.watch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface2);
+  border-radius: calc(var(--radius) - 2px);
+  border-left: 3px solid var(--line);
+}
+
+.watch-row.current-watch {
+  border-left-color: var(--accent);
+  background: #163040;
+}
+
+.watch-period {
+  font-size: 0.98rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 9rem;
+}
+
+.watch-date {
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.watch-crew {
+  font-size: 0.92rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.watch-notes {
+  font-size: 0.82rem;
+  color: var(--muted);
+  flex: 1 1 100%;
+  padding-left: 0.1rem;
+}
+
+.watch-empty {
+  color: var(--muted);
+  font-size: 0.92rem;
+  padding: 0.5rem 0;
+}
+
+/* ── Charter detail ── */
+.charter-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.55rem;
+}
+
+.charter-field {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem;
+  background: var(--surface2);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.charter-field-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.charter-field-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .telemetry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .telem-value {
+    font-size: 1.5rem;
+  }
+}
