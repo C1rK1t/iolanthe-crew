@@ -15,6 +15,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -136,6 +141,7 @@ body {
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-wrap: balance;
 }
 
 /* ── Telemetry grid ── */
@@ -391,7 +397,7 @@ body {
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
-  min-height: 38px;
+  min-height: 40px;
   padding: 8px 16px;
   border-radius: 999px;
   font: inherit;
