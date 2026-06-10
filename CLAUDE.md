@@ -36,9 +36,9 @@ The Navigation tab includes a Leaflet satellite map (Esri tiles via CDN) with li
 ```powershell
 # In the iolanthe-server repo:
 $env:DATA_DIR="$PWD\data-local"
-$env:GUEST_STATIC_DIR="..\iolanthe-guest"
-$env:ADMIN_STATIC_DIR="..\iolanthe-admin"
-$env:CREW_STATIC_DIR="..\iolanthe-crew"
+$env:GUEST_STATIC_DIR="..\..\portal\iolanthe-guest"
+$env:ADMIN_STATIC_DIR="..\..\portal\iolanthe-admin"
+$env:CREW_STATIC_DIR="..\..\portal\iolanthe-crew"
 node server.js
 ```
 
