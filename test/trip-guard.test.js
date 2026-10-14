@@ -11,7 +11,7 @@ const { scanJs, scanHtml } = require("./visible-words.js");
 
 const ROOT = path.join(__dirname, "..");
 const WORDING_MODULE = "wording.js";
-const ALLOW_LIST = ["crew.js", "index.html"];
+const ALLOW_LIST = [];
 
 const sources = fs.readdirSync(ROOT)
   .filter(name => /\.(js|html)$/.test(name) && name !== WORDING_MODULE)
