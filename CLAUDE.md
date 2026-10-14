@@ -3,6 +3,10 @@
 Crew-facing PWA for Princess Iolanthe. Served at `/crew/` by `iolanthe-server`.
 Accessible from the crew VLAN (10.33.3.0/24) and bridge VLAN (10.33.2.0/24).
 
+> **Status (2026-10-14): not developed and not in use.** The crew site is an early sketch: nobody on board relies on it
+> yet, so it is not a release target. Keep changes to it minimal (only what a cross-site change such as spec T needs);
+> do not spend effort on polish, versioned assets or hardening here until David decides to develop it.
+
 ## Architecture position
 
 ```
