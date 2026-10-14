@@ -4,7 +4,28 @@
 // Not a JavaScript parser: it walks the source once, skipping comments and regex literals, and tests only the text of
 // string and template literals.
 
-const WORD = /(?<![\w\-/.#$@])(charters?|apa|clients?|agents?|proposals?)(?![\w\-/=])/i;
+// A whole word, wherever it sits: "Client/Agent" and "Charter-specific" are words too (same approach as the admin's
+// test/wording-scan.js). Names that merely contain one (charter.json, /api/charter, class="charter-x") are blanked
+// first by visiblePart().
+const WORD = /\b(charters?|apa|clients?|agents?|proposals?)\b/i;
+
+// A lowercase one-word literal (optionally ending in ":") is a key or id; a list of lowercase hyphenated words is a
+// class list, never a sentence.
+const KEY_LITERAL = /^[a-z][a-z0-9_]*:?$/;
+const CLASS_LIST = /^(?!.*\b(?:the|an?|to|of|and|for|in|it|this|that|with)\b)[a-z][a-z0-9_:-]*(?:\s+[a-z][a-z0-9_:-]*)*$/;
+// Attributes nobody reads on screen (ids, classes, data-* except data-label / data-title, URLs, form plumbing), in
+// any quoting, with spaces around "=".
+const HIDDEN_ATTRIBUTE = /\s(?:(?:class|id|data-(?!label\b|title\b)[\w-]+|href|src|for|name|type|role|style|rel|target|method|action|autocomplete|inputmode|pattern|min|max|step|aria-controls|aria-labelledby|aria-describedby)\s*=\s*("[^"]*(?:"|$)|'[^']*(?:'|$)|[^\s>"']*)|value="[a-z][a-z0-9_-]*")/gi;
+// In a literal only these are names: data-* attributes, a lowercase token in quotes, a .class / #id, file names
+// (charter.json, charter_id), a path that starts a word (/api/charter) and query parameters (?x=, x=).
+const NAME = /(?:\bdata-[\w-]+|(?<=["'])[a-z][a-z0-9_-]*(?=["'])|(?<=[.#])[A-Za-z][A-Za-z0-9_-]*|[A-Za-z0-9$-]+(?:[_.#][A-Za-z0-9$-]+)+|(?<![A-Za-z0-9$])\/[A-Za-z0-9$_./?=&-]*|[?&][A-Za-z0-9_-]+=|(?<![\w\s])[a-z][a-z0-9_-]*=)/g;
+const blank = text => " ".repeat(text.length);
+
+// What a person could read of a literal's text: hidden attributes and names blanked.
+function visiblePart(text) {
+  if (KEY_LITERAL.test(text) || CLASS_LIST.test(text)) return "";
+  return text.replace(HIDDEN_ATTRIBUTE, blank).replace(NAME, blank);
+}
 const REGEX_PREV = new Set(["", "(", ",", "=", ":", "[", "!", "&", "|", "?", "{", "}", ";", "+", "-", "*", "%", "<", ">", "~", "^"]);
 
 function lineOf(source, index) {
@@ -62,7 +83,7 @@ function scanJs(source) {
 
   function check(text, start, isTemplate) {
     if (!isTemplate && isInternalLiteral(text)) return;
-    if (WORD.test(text)) hits.push({ line: lineOf(source, start), text: text.trim().slice(0, 120) });
+    if (WORD.test(visiblePart(text))) hits.push({ line: lineOf(source, start), text: text.trim().slice(0, 120) });
   }
 
   function continueTemplate() {
@@ -108,7 +129,7 @@ function scanJs(source) {
   return hits;
 }
 
-const VISIBLE_ATTRS = ["alt", "title", "aria-label", "placeholder", "value"];
+const VISIBLE_ATTRS = ["alt", "title", "aria-label", "placeholder", "value", "data-label", "data-title"];
 
 // Returns [{ line, text }] for visible words in HTML: element text and the visible attributes.
 function scanHtml(source) {
@@ -124,10 +145,10 @@ function scanHtml(source) {
   };
   while ((m = tag.exec(blanked))) {
     test(blanked.slice(last, m.index), last);
-    const attr = /\s([a-z-]+)\s*=\s*"([^"]*)"/gi;
+    const attr = /\s([a-z-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>"']+))/gi;
     let a;
     while ((a = attr.exec(m[0]))) {
-      if (VISIBLE_ATTRS.includes(a[1].toLowerCase())) test(a[2], m.index + a.index);
+      if (VISIBLE_ATTRS.includes(a[1].toLowerCase())) test(a[2] ?? a[3] ?? a[4], m.index + a.index);
     }
     last = m.index + m[0].length;
   }

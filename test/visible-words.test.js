@@ -53,3 +53,30 @@ test("scanHtml: flags visible text and attributes, not tags, data-*, classes, co
   assert.deepEqual(words(scanHtml(html)), ["Charter", "Active Charter", "Client photo", "Agent name"]);
   assert.deepEqual(scanHtml(html).map(hit => hit.line), [2, 3, 4, 5]);
 });
+
+test("scanJs: a word joined to another by a slash or a hyphen is still a word", () => {
+  assert.deepEqual(words(scanJs('say("Client/Agent");')), ["Client/Agent"]);
+  assert.deepEqual(words(scanJs('say("Charter/APA fees");')), ["Charter/APA fees"]);
+  assert.deepEqual(words(scanJs('say("Charter-specific");')), ["Charter-specific"]);
+  assert.deepEqual(words(scanJs('say("Charter-linked items");')), ["Charter-linked items"]);
+  assert.deepEqual(scanJs('say("See /api/charter and charter.json and charter-pack.js?v=1");'), []);
+});
+
+test("scanJs: visible data-label / data-title in markup count; other data-*, classes and ids do not", () => {
+  assert.deepEqual(words(scanJs('const h = `<span data-label="Charter" title="APA">x</span>`;')), ["<span data-label=\"Charter\" title=\"APA\">x</span>"]);
+  assert.deepEqual(scanJs('const h = `<div data-panel="charter" class="charter" id=charterBox data-x = \'apa\'>Fees</div>`;'), []);
+});
+
+test("scanHtml: single-quoted, unquoted and spaced attribute values are read", () => {
+  const html = "<img alt='Charter photo'><img alt=Client><b aria-label = \"Agent\">x</b><input placeholder = 'Proposal'>";
+  assert.deepEqual(words(scanHtml(html)), ["Charter photo", "Client", "Agent", "Proposal"]);
+});
+
+test("scanHtml: data-label and data-title are visible, other data-* values are not", () => {
+  const html = '<a data-label="Charter">x</a><a data-title=\'APA\'>y</a><a data-tab = "charter" data-panel=apa>z</a>';
+  assert.deepEqual(words(scanHtml(html)), ["Charter", "APA"]);
+});
+
+test("scanHtml: a slash or hyphen in visible text does not hide a word", () => {
+  assert.deepEqual(words(scanHtml("<p>Client/Agent</p><p>Charter-specific</p>")), ["Client/Agent", "Charter-specific"]);
+});

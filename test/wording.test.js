@@ -69,9 +69,29 @@ test("w: var values go in literally (no $-patterns, no second expansion)", () =>
   assert.equal(w("greet", { vars: { name: "$& {name}" } }), "Hello $& {name}");
 });
 
-test("w: an unknown key is a bug and throws", () => {
+// Runs fn with console.warn stubbed; returns the warnings it collected.
+function collectWarnings(fn) {
+  const warnings = [];
+  const original = console.warn;
+  console.warn = message => warnings.push(message);
+  try {
+    fn();
+  } finally {
+    console.warn = original;
+  }
+  return warnings;
+}
+
+test("w: an unknown key warns once and returns the key text", () => {
   const { w } = createWording(BUILT_IN);
-  assert.throws(() => w("no_such_key"), /Unknown wording key/);
+  const warnings = collectWarnings(() => {
+    assert.equal(w("no_such_key"), "no_such_key");
+    assert.equal(w("no_such_key", { plural: true, vars: { n: 1 } }), "no_such_key");
+    assert.equal(w("other_missing_key"), "other_missing_key");
+  });
+  assert.equal(warnings.length, 2, "one warning per key, not per call");
+  assert.match(warnings[0], /no word "no_such_key"/);
+  assert.match(warnings[1], /no word "other_missing_key"/);
 });
 
 test("setWording: a non-object keeps the words already loaded; reset clears them", () => {
@@ -116,4 +136,19 @@ test("applyStatic: text, plural, lower and attribute targets", () => {
   assert.equal(title.attr("title"), "Trip");
   assert.equal(title.textContent, "pre-filled");
   applyStatic(null);
+});
+
+test("applyStatic: an unknown data-w key does not stop the other elements being filled", () => {
+  const { setWording, applyStatic } = createWording(BUILT_IN);
+  const before = fakeNode({ "data-w": "unit" });
+  const stray = fakeNode({ "data-w": "no_such_static_key" });
+  const after = fakeNode({ "data-w": "unit", "data-w-plural": "" });
+  setWording(TRIP);
+  const warnings = collectWarnings(() => {
+    assert.doesNotThrow(() => applyStatic({ querySelectorAll: () => [before, stray, after] }));
+  });
+  assert.equal(before.textContent, "Trip");
+  assert.equal(stray.textContent, "no_such_static_key");
+  assert.equal(after.textContent, "Trips");
+  assert.equal(warnings.length, 1);
 });

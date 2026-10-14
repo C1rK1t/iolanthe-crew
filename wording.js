@@ -35,6 +35,7 @@
 
   function createWording(builtIn) {
     let loaded = null;
+    const warned = new Set();
 
     function entryFor(key) {
       const fromServer = loaded && Object.prototype.hasOwnProperty.call(loaded, key) ? loaded[key] : null;
@@ -44,13 +45,22 @@
       if (Object.prototype.hasOwnProperty.call(builtIn, key)) {
         return builtIn[key];
       }
-      throw new Error(`Unknown wording key: ${key}`);
+      return null;
     }
 
+    // Never throws: a key in neither the loaded words nor builtIn is a programming mistake (the keys test catches it),
+    // but one wrong key must not blank a page, so it warns once per key and returns the key text.
     // w("unit_day", { vars: { n: 3 } }) -> "TRIP DAY 3"; w("unit", { plural: true, lower: true }) -> "trips".
     function w(key, opts) {
       const options = opts || {};
       const entry = entryFor(key);
+      if (entry === null) {
+        if (!warned.has(key)) {
+          warned.add(key);
+          console.warn(`wording.js: no word "${key}"`);
+        }
+        return String(key);
+      }
       let text = entry[options.plural ? 1 : 0];
       if (options.lower) {
         text = lowerWords(text);
