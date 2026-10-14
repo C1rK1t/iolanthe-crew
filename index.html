@@ -22,7 +22,7 @@
   <nav class="tab-bar" role="tablist">
     <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="nav">Navigation</button>
     <button class="tab-btn"        role="tab" aria-selected="false" data-tab="watches">Watches</button>
-    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="charter">Charter</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="charter" data-w="unit"></button>
     <button class="tab-btn"        role="tab" aria-selected="false" data-tab="weather">Weather</button>
   </nav>
 
@@ -105,7 +105,7 @@
     <!-- ── Charter ── -->
     <section id="tab-charter" class="tab-panel" role="tabpanel">
       <div class="card" id="charterCard">
-        <h2 class="card-heading">Active Charter</h2>
+        <h2 class="card-heading" data-w="active_unit"></h2>
         <div id="charterDetail" class="charter-detail"></div>
       </div>
     </section>
@@ -118,6 +118,7 @@
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+  <script src="/crew/wording.js" defer></script>
   <script src="/crew/crew.js" defer></script>
 </body>
 </html>

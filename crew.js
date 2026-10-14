@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  // Spec T (Trip mode): visible "charter" words are read through the wording helper (wording.js, loaded before this file).
+  const { w, setWording, applyStatic } = window.IolantheWording;
+  applyStatic(document);   // the built-in words at once; the server's words replace them when /api/charter answers
+
   // ── Tab navigation ────────────────────────────────────────────────────────
   const tabBtns   = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
@@ -212,11 +216,13 @@
       const res = await fetch('/api/charter');
       if (!res.ok) return;
       const d = await res.json();
+      setWording(d.wording);
+      applyStatic(document);
 
       if (d.name) charterNameEl.textContent = d.name;
 
       const fields = [
-        ['Charter',   d.name],
+        [w('unit'),   d.name],
         ['Principal', d.principal_name],
         ['Start',     d.start_date],
         ['End',       d.end_date],
@@ -255,7 +261,7 @@
       const watches = Array.isArray(d.watches) ? d.watches : [];
 
       if (!watches.length) {
-        watchList.innerHTML = '<p class="watch-empty">No watch schedule set for this charter.</p>';
+        watchList.innerHTML = `<p class="watch-empty" data-w="watches_none">${w('watches_none')}</p>`;
         return;
       }
 

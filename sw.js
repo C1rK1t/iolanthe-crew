@@ -1,8 +1,9 @@
-const CACHE = 'iolanthe-crew-v2';
+const CACHE = 'iolanthe-crew-v3';
 const STATIC = [
   '/crew/',
   '/crew/crew.css',
   '/crew/crew.js',
+  '/crew/wording.js',
   '/crew/manifest.webmanifest'
 ];
 
